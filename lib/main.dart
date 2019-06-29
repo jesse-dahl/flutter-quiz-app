@@ -31,8 +31,16 @@ class _QuizPageState extends State<QuizPage> {
   List<String> questions = [
     'You can lead a cow down stairs but not up stairs.',
     'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.'
+    'A slug\'s blood is green.',
   ];
+
+  List<bool> answers = [
+    false,
+    true,
+    true,
+  ];
+
+  int currentQuestion = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +54,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[0],
+                questions[currentQuestion],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -71,7 +79,21 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
+                bool correctAnswer = answers[currentQuestion];
 
+                setState(() {
+                  if(correctAnswer) {
+                    scoreKeeper.add(Icon(Icons.check, color: Colors.green));
+                  } else {
+                    scoreKeeper.add(Icon(Icons.close, color: Colors.red));
+                  }
+                  
+                  if(currentQuestion < questions.length) {
+                    currentQuestion += 1;
+                  } else if(currentQuestion >= questions.length) {
+                    currentQuestion = 0;
+                  }
+                });
               },
             ),
           ),
@@ -90,7 +112,21 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                
+                bool correctAnswer = answers[currentQuestion];
+
+                setState(() {
+                  if(correctAnswer == false) {
+                    scoreKeeper.add(Icon(Icons.check, color: Colors.green));
+                  } else {
+                    scoreKeeper.add(Icon(Icons.close, color: Colors.red));
+                  }
+
+                  if(currentQuestion < questions.length) {
+                    currentQuestion += 1;
+                  } else {
+                    currentQuestion = 0;
+                  }
+                });
               },
             ),
           ),
