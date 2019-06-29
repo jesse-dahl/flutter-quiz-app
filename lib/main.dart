@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'quizBrain.dart';
+
+QuizBrain quizBrain = QuizBrain();
 
 void main() => runApp(Quizzler());
 
@@ -28,18 +31,6 @@ class _QuizPageState extends State<QuizPage> {
 
   List<Icon> scoreKeeper = [];
 
-  List<String> questions = [
-    'You can lead a cow down stairs but not up stairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.',
-  ];
-
-  List<bool> answers = [
-    false,
-    true,
-    true,
-  ];
-
   int currentQuestion = 0;
 
   @override
@@ -54,7 +45,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[currentQuestion],
+                quizBrain.questionBank[currentQuestion].questionText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -79,7 +70,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = answers[currentQuestion];
+                bool correctAnswer = quizBrain.questionBank[currentQuestion].questionAnswer;
 
                 setState(() {
                   if(correctAnswer) {
@@ -87,12 +78,8 @@ class _QuizPageState extends State<QuizPage> {
                   } else {
                     scoreKeeper.add(Icon(Icons.close, color: Colors.red));
                   }
-                  
-                  if(currentQuestion < questions.length) {
-                    currentQuestion += 1;
-                  } else if(currentQuestion >= questions.length) {
-                    currentQuestion = 0;
-                  }
+
+                  currentQuestion++;
                 });
               },
             ),
@@ -112,7 +99,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = answers[currentQuestion];
+                bool correctAnswer = quizBrain.questionBank[currentQuestion].questionAnswer;
 
                 setState(() {
                   if(correctAnswer == false) {
@@ -121,11 +108,7 @@ class _QuizPageState extends State<QuizPage> {
                     scoreKeeper.add(Icon(Icons.close, color: Colors.red));
                   }
 
-                  if(currentQuestion < questions.length) {
-                    currentQuestion += 1;
-                  } else {
-                    currentQuestion = 0;
-                  }
+                  currentQuestion++;
                 });
               },
             ),
