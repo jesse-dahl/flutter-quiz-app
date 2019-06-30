@@ -31,7 +31,7 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
 
   List<Icon> scoreKeeper = [];
-  int correctAnswers = 0;
+  int totalCorrect = 0;
   
 
   void checkAnswer(bool userPickedAnswer) {
@@ -40,6 +40,7 @@ class _QuizPageState extends State<QuizPage> {
     void trackScore() {
       if(userPickedAnswer == correctAnswer) {
         scoreKeeper.add(Icon(Icons.check, color: Colors.green));
+        totalCorrect++;
       } else {
         scoreKeeper.add(Icon(Icons.close, color: Colors.red));
       }
@@ -47,15 +48,26 @@ class _QuizPageState extends State<QuizPage> {
     setState(() {
 
       if(quizBrain.isFinished() == true) {
+        trackScore();
         Alert(
           context: context,
           title: "Wow!",
-          desc: "You have completed the quiz. Your score is *enter score here*"
+          desc: "You have completed the quiz. Your score is $totalCorrect",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Retake The Quiz",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ]
         ).show();
         quizBrain.reset();
         scoreKeeper = [];
-
+        totalCorrect= 0;
       } else {
+        trackScore();
         quizBrain.nextQuestion();
       }
       
